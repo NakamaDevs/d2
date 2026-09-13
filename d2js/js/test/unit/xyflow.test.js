@@ -23,7 +23,7 @@ describe("layoutXyflow", () => {
           { id: "b", width: 120, height: 48 },
         ],
         [{ id: "a-b", source: "a", target: "b" }],
-        { seeds: [1] }
+        { seeds: [7, 11] }
       );
 
       expect(result.nodes).toHaveLength(2);
@@ -98,7 +98,7 @@ describe("layoutXyflow", () => {
     ]);
     expect(capture.options).toEqual({ layout: "tala" });
     expect(capture.source).toContain("direction: right");
-    expect(capture.source).toContain("tala-seeds: [7, 11]");
+    expect(capture.source).toContain("tala-seeds: [7; 11]");
     expect(capture.source).toContain("n0: {width: 180; height: 72}");
     expect(capture.source).toContain("n0 -> n1");
     expect(nodes[0]).not.toHaveProperty("position");
