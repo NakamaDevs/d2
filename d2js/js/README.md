@@ -63,6 +63,45 @@ const svg = await d2.render(result.diagram, result.renderOptions);
 await d2.dispose();
 ```
 
+### xyflow layouts
+
+TALA can compute node positions and routed edges for React Flow or Svelte Flow.
+The adapter does not mutate its inputs. Returned elements preserve existing data,
+and returned edges add route points under `data.tala.route`.
+
+```javascript
+import { D2, layoutXyflow, talaRoutePath } from '@d2lang/d2';
+import { BaseEdge } from '@xyflow/react';
+
+const d2 = new D2();
+const { nodes: layoutedNodes, edges: layoutedEdges } = await layoutXyflow(
+  d2,
+  nodes,
+  edges,
+  { direction: 'right', seeds: [1, 2, 3] },
+);
+
+// Apply layoutedNodes and layoutedEdges with xyflow's setNodes and setEdges.
+function TalaEdge({ data, markerEnd }) {
+  return <BaseEdge path={talaRoutePath(data.tala.route)} markerEnd={markerEnd} />;
+}
+await d2.dispose();
+```
+
+The adapter uses measured node dimensions when available. It stores TALA route
+points in `edge.data.tala.route`. Use `talaRoutePath` with an xyflow `BaseEdge`
+to render these points.
+
+D2 requires integer dimensions. The adapter rounds fractional dimensions up so
+the resulting shape still contains the measured node. This first adapter supports
+flat nodes with the default top-left origin. Call `d2.dispose()` to stop an active
+layout and release its worker. A disposed instance cannot accept more work.
+
+The adapter uses `measured.width` and `measured.height` first. It then uses the
+node's explicit dimensions. The fallback dimensions are 172 by 36 pixels. Direction
+accepts `up`, `down`, `left`, or `right`, and defaults to `right`. Seeds must be a
+non-empty array of safe integers. TALA defaults apply when seeds are absent.
+
 Configuring render options (see [CompileOptions](#compileoptions) for all available options):
 
 ```javascript

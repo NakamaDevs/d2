@@ -1,5 +1,7 @@
 import {
   D2,
+  layoutXyflow,
+  talaRoutePath,
   type CompileOptions,
   type CompileRequest,
   type CompileResponse,
@@ -18,6 +20,17 @@ const configured: Promise<CompileResponse> = d2.compile(source, options);
 const imported: Promise<CompileResponse> = d2.compile(request);
 const overridden: Promise<CompileResponse> = d2.compile(request, options);
 const dynamic: Promise<CompileResponse> = d2.compile(input, options);
+const xyflow = layoutXyflow(
+  d2,
+  [{ id: "a", width: 100, height: 40, data: { title: "A" } }],
+  [],
+  { direction: "right", seeds: [1, 2, 3] }
+);
+xyflow.then(({ nodes }) => nodes[0].position.x);
+talaRoutePath([
+  { x: 0, y: 0 },
+  { x: 10, y: 20 },
+]);
 
 for (const layout of ["dagre", "elk", "tala"] as const) {
   d2.compile(source, { layout });

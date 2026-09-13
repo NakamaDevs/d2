@@ -11,6 +11,49 @@ export class D2 {
   dispose(): Promise<void>;
 }
 
+export interface XyflowLayoutOptions {
+  /** TALA flow direction [default: "right"]. */
+  direction?: "up" | "down" | "left" | "right";
+  /** Deterministic TALA seeds. An empty array is invalid. */
+  seeds?: number[];
+  /** Width used when measured and explicit widths are absent [default: 172]. */
+  defaultWidth?: number;
+  /** Height used when measured and explicit heights are absent [default: 36]. */
+  defaultHeight?: number;
+}
+
+export interface XyflowNode {
+  id: string;
+  position?: Point;
+  width?: number;
+  height?: number;
+  measured?: { width?: number; height?: number };
+  parentId?: never;
+  origin?: [0, 0];
+  data?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+export interface XyflowEdge {
+  id: string;
+  source: string;
+  target: string;
+  data?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+export function layoutXyflow<N extends XyflowNode, E extends XyflowEdge>(
+  d2: D2,
+  nodes: readonly N[],
+  edges: readonly E[],
+  options?: XyflowLayoutOptions
+): Promise<{
+  nodes: Array<N & { position: Point }>;
+  edges: Array<E & { data: E["data"] & { tala: { route: Point[] } } }>;
+}>;
+
+export function talaRoutePath(route: Point[]): string;
+
 export interface RenderOptions {
   /** Enable sketch mode [default: false] */
   sketch?: boolean;
