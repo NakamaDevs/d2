@@ -96,7 +96,7 @@ function d2Source(nodes, edges, contract) {
   const lines = [`direction: ${contract.direction}`];
   if (contract.seeds) {
     lines.push(
-      `vars: { d2-config: { data: { tala-seeds: [${contract.seeds.join(", ")}] } } }`
+      `vars: { d2-config: { data: { tala-seeds: [${contract.seeds.join("; ")}] } } }`
     );
   }
   nodes.forEach((_node, index) => {
