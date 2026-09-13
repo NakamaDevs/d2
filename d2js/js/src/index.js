@@ -1,4 +1,5 @@
 import { createWorker, loadFile } from "./platform.js";
+export { layoutXyflow, talaRoutePath } from "./xyflow.js";
 
 export class D2 {
   constructor() {
